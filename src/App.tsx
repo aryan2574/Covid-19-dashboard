@@ -2,9 +2,8 @@
 import * as React from 'react';
 
 // Import Components
-import DashboardNavbar from "./Components/Navbar";
+import DashboardNavbar from './Components/Navbar';
 import SearchBar from './Components/SearchBar';
-
 
 // Props
 interface AppProps {}
@@ -28,7 +27,7 @@ export default class App extends React.Component<AppProps, AppStates> {
   }
 
   componentDidMount() {
-    // Fetching JSON data from local file
+    // Fetching JSON data from API
     try {
       fetch('https://data.covid19india.org/v4/min/data.min.json')
           .then((res) => res.json())
@@ -44,33 +43,31 @@ export default class App extends React.Component<AppProps, AppStates> {
       this.setState({
         data: [''],
         dataFetched: false,
-        error: "error"
+        error: 'error',
       });
     }
+
+    console.log('App Component Mounted');
   }
 
   render() {
     const { data, dataFetched, error } = this.state;
+
     return (
         <div>
+          {/* If there is an error, show error text */}
+          {error && <p> There is an error while fetching data </p>}
+
+          {/* If data is being fetched, show loading text */}
+          {!dataFetched && <p> Loading... </p>}
+
           {/* If data is fetched, render the Navbar and SearchBar components*/}
-
-          {
-              error && <p> There is an error while fetching data </p>
-          }
-
-          {
-              !dataFetched && <p> Loading... </p>
-          }
-
-          {
-              dataFetched && (
-                  <div>
-                    <DashboardNavbar />
-                    <SearchBar data={data} />
-                  </div>
-              )
-          }
+          {dataFetched && (
+              <div>
+                <DashboardNavbar />
+                <SearchBar data={data} />
+              </div>
+          )}
         </div>
     );
   }
