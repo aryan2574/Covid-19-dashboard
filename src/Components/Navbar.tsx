@@ -5,7 +5,9 @@ import * as React from 'react';
 import { Navbar, NavbarBrand } from 'reactstrap';
 
 // Import Props
-interface NavbarProps {}
+interface NavbarProps {
+    darkMode: boolean;
+}
 
 // Import States
 interface NavbarState {}
@@ -17,15 +19,11 @@ export default class DashboardNavbar extends React.Component<
     constructor(props: NavbarProps) {
         super(props);
     }
-
-    componentDidMount() {
-        console.log('Navbar Component Mounted');
-    }
-
     render() {
+        const { darkMode } = this.props;
         return (
             <div>
-                <Navbar color="light" light expand="md">
+                <Navbar color={darkMode ? 'black' : 'light'} expand="md">
                     <NavbarBrand href="/">
                         <p
                             style={{

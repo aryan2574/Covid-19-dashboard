@@ -2,14 +2,13 @@
 import * as React from 'react';
 
 // Import React UI Components
-import { Form, FormGroup, Label, Input } from 'reactstrap';
-
-// Import Components
+import {  Form, FormGroup, Label, Input } from 'reactstrap';
 import DataPage from './DataPage';
 
 // Props
 interface SearchBarProps {
     data: [''];
+    darkMode: boolean;
 }
 
 // States
@@ -38,7 +37,6 @@ export default class SearchBar extends React.Component<
         console.log('SearchBar Component Mounted');
     }
 
-    //  State Selection Function
     stateSelectHandler(event: any) {
         this.setState({
             state: event.target.value,
@@ -46,7 +44,6 @@ export default class SearchBar extends React.Component<
         });
     }
 
-    // District Selection Function
     districtSelectHandler(event: any) {
         this.setState({
             district: event.target.value,
@@ -54,18 +51,26 @@ export default class SearchBar extends React.Component<
     }
 
     render() {
-        const { data } = this.props;
+        const { data, darkMode } = this.props;
         const { state, district } = this.state;
         const states = Object.keys(data);
 
         // @ts-ignore
-        // @ts-ignore
         return (
             <div className="container-fluid">
-                <Form className="row" style={{ background: 'aqua' }}>
+                <Form
+                    className="row"
+                    style={
+                        darkMode ? { background: '#800000' } : { background: '#ffb6c1' }
+                    }
+                >
                     <FormGroup
                         className="col-sm-5 align-baseline"
-                        style={{ fontWeight: 'bold' }}
+                        style={
+                            darkMode
+                                ? { color: 'white', fontWeight: 'bold' }
+                                : { color: 'black', fontWeight: 'bold' }
+                        }
                     >
                         <Label for="state">State</Label>
                         <Input
@@ -74,15 +79,24 @@ export default class SearchBar extends React.Component<
                             id="state"
                             onChange={this.stateSelectHandler}
                         >
-                            <option>{state === '' ? 'Select' : state}</option>
+                            {!state && <option>Select</option>}
                             {states.map((state: string, index: number) => (
-                                <option key={index}>{state}</option>
+                                <option key={index} value={state}>
+                                    {state}
+                                </option>
                             ))}
                         </Input>
                     </FormGroup>
 
                     <FormGroup className="col-sm-5 align-baseline">
-                        <Label for="district" style={{ fontWeight: 'bold' }}>
+                        <Label
+                            for="district"
+                            style={
+                                darkMode
+                                    ? { color: 'white', fontWeight: 'bold' }
+                                    : { color: 'black', fontWeight: 'bold' }
+                            }
+                        >
                             City
                         </Label>
                         <Input
@@ -91,14 +105,17 @@ export default class SearchBar extends React.Component<
                             id="district"
                             onChange={this.districtSelectHandler}
                         >
-                            <option> {district === '' ? 'Select' : district} </option>
+                            {!district && (
+                                <option>{district === '' ? 'Select' : district}</option>
+                            )}
                             {
-                                // @ts-ignore
                                 state !== '' &&
                                 // @ts-ignore
                                 Object.keys(data[state].districts).map(
                                     (district: string, index: number) => (
-                                        <option key={index}>{district}</option>
+                                        <option key={index} value={district}>
+                                            {district}
+                                        </option>
                                     )
                                 )
                             }
@@ -106,9 +123,13 @@ export default class SearchBar extends React.Component<
                     </FormGroup>
                 </Form>
 
-                {/* Rendering of DataPage component only when data is available */}
                 {state !== '' && district !== '' && (
-                    <DataPage data={data} state={state} district={district} />
+                    <DataPage
+                        data={data}
+                        state={state}
+                        district={district}
+                        darkMode={darkMode}
+                    />
                 )}
             </div>
         );
